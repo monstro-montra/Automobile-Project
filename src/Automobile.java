@@ -9,7 +9,7 @@ public class Automobile {
     static Scanner in = new Scanner(System.in);
 
     //parameterized constructor for automobile object
-    public Automobile(String autoMake, String autoModel, String autoColor, int autoYear, int autoMileage ){
+    public Automobile(String autoMake, String autoName, String autoColor, int autoYear, int autoMileage ){
         //loop for make input
         while(true){
             try{
@@ -114,9 +114,6 @@ public class Automobile {
         }
     }
 
-     public static void run(){
-        
-    }
 }
 
     
