@@ -8,10 +8,11 @@ public class Main {
     private static int mileage;
     static Scanner in = new Scanner(System.in);
     static int capacity;
-    Automobile[] carArray = new Automobile[capacity];
+    static int i;
+    public static Automobile[] carArray;
     private static int errorDetector; //this will be used in loop to check if 
     //the return input is either an incorrect integer or an incorrect string.
-    //without this, the program will ask for an extra input if i use in.next() 
+    //without this, the program will ask     for an extra input if i use in.next() 
     //if i do not include in.next(), there will be an endless loop if user inputs 
     //anything incorrect.
     // 0 = invalid int
@@ -23,28 +24,31 @@ public class Main {
     }
 
     
-
-
-    static void listVehicleInfo(){
-        new Automobile(make, model, color, year, mileage);
-
-        System.out.println("Here is what you input. ");
-        System.out.println("Make: " + Automobile.make);
-        System.out.println("Model: " + Automobile.model);
-        System.out.println("Year: " + Automobile.year);
-        System.out.println("Color: " + Automobile.color);
-        System.out.println("Mileage: " + Automobile.mileage);
+    static void listAllVehicleInfo(){
+        for (i = 0; i < capacity; i++){
+            int x = i + 1;
+            System.out.println("Car number: " + x);
+            carArray[i].showData();
+        }        
 
     }
     
-    public static String addVehicle(String autoMake, String autoModel, String autoColor, int autoYear, int autoMileage){
+    public static Automobile addVehicle(String autoMake, String autoModel, String autoColor, int autoYear, int autoMileage){
+        int howMany;
+
+        System.out.println("How many vehicles would you like to add?");
+        howMany = in.nextInt();
+        
+        for(i = 0; i < howMany; i ++){
+            int x = i + 1;
         //loop for make input
             while(true){
                 try{//try catch block
-                    System.out.println("Input your car's make: ");
+                    System.out.println("Input car " + x +" make: ");
                     //make if else block
                     if(in.hasNext("[A-Za-z]*")){  // if 'in has alphabetical input
                         make = in.next(); // set 'make' to the next string input
+                        carArray[i].setMake(make);
                         break; //break loop
                     } else {
                         throw new Exception("Invalid input."); //otherwise throw error
@@ -59,12 +63,14 @@ public class Main {
             //loop for model input
             while(true){
                 try{
-                    System.out.println("Input your car's model: ");
+                    System.out.println("Input car " + x + " model: ");
                     if(in.hasNext("[A-Za-z]*")){
-                        model = in.next();
+                        //model = in.next();
+                        carArray[i].setModel(in.next());
                         break;
                     } else if(in.hasNext("[A-Za-z]*" + "[0123456789]")){ // or if the next input contains numbers and alphabet
                         model = in.next();
+                        carArray[i].setModel(model);
                         break;
                     } else {
                         throw new Exception("Invalid input.");
@@ -79,10 +85,11 @@ public class Main {
             //loop for color input
             while(true){
                 try{
-                    System.out.println("Input your car's color: ");
+                    System.out.println("Input car " + x + " color: ");
                     //make if else block
                     if(in.hasNext("[A-Za-z]*")){
                         color = in.next();
+                        carArray[i].setColor(color);
                         break;
                     } else {
                         throw new Exception("Invalid input.");
@@ -97,7 +104,7 @@ public class Main {
             //loop for year input
             while(true){
                 try{
-                    System.out.println("Input your car's year: ");
+                    System.out.println("Input car " + x +" year: ");
                     if(in.hasNextInt()){
                         year = in.nextInt();
                         if (year < 1885){ //1885 was the year cars were first made
@@ -109,6 +116,7 @@ public class Main {
                             throw new Exception("Invalid year.");
                         } else {
                             errorDetector = 2;
+                            carArray[i].setYear(year);
                             break;
                         }
                     }
@@ -130,7 +138,7 @@ public class Main {
             //loop for mileage input
             while(true){
                 try{
-                    System.out.println("Input your car's mileage: ");
+                    System.out.println("Input car " + x + " mileage: ");
                     if(in.hasNextInt()){
                         mileage = in.nextInt();
                         if (mileage < 0){ //if the next integer is less than 0
@@ -139,6 +147,7 @@ public class Main {
                         } else {
                             //no errors detected, break from loop.
                             errorDetector = 2;
+                            carArray[i].setMileage(mileage);
                             break;
                         }
                     } else {
@@ -155,7 +164,9 @@ public class Main {
     
                 }
             }
-        return "success";
+            
+        }
+        return carArray[i];
     }
 
     static String removeVehicle(String autoMake, String autoModel, String autoColor, int autoYear){
@@ -193,18 +204,15 @@ public class Main {
                     
 
             }
+            
         }
         return capacity;
     }
 
-    public static void clearScreen(){
-        System.out.print("\033[H\033[2J"); 
-        System.out.flush();
-    }
 
     public static int menuOptions(int menuChoice){
-        
 
+        
         do{
             System.out.println("Main Menu");
             System.out.println("1.) Add a vehicle ");
@@ -223,7 +231,6 @@ public class Main {
                 
                         case 1: //case for adding a vehicle
                             addVehicle(make, model, color, year, mileage); // this will create a new vehicle
-                            clearScreen();
                             break;
     
                         case 2: //case for removing a vehicle
@@ -231,7 +238,7 @@ public class Main {
                             break;
     
                         case 3: //case for Listing all vehicles
-                            listVehicleInfo(); //this will list the vehicle information
+                            listAllVehicleInfo(); //this will list the vehicle information
                             break;
     
                         case 4: //case for updating a vehicle
@@ -272,7 +279,16 @@ public class Main {
     public static void main(String[] args){
         System.out.println("Hi! We are going to store your vehicle information in your inventory.");
         System.out.println("First, we will set the capacity of your inventory.");
+        
         setCapacity(); //this will have the user set the capacity of the vehicle inventory.
+        
+        carArray = new Automobile[capacity];
+        System.out.println("Capacity of vehicle inventory is " +  carArray.length + ".");
+        
+        for (int i = 0; i < capacity; i++){
+            carArray[i] = new Automobile(make, model, color, year, mileage);
+        }
+
         menuOptions(0);
     }
     
