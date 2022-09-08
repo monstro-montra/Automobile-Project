@@ -9,6 +9,15 @@ public class Main {
     static Scanner in = new Scanner(System.in);
     static int capacity;
     Automobile[] carArray = new Automobile[capacity];
+    private static int errorDetector; //this will be used in loop to check if 
+    //the return input is either an incorrect integer or an incorrect string.
+    //without this, the program will ask for an extra input if i use in.next() 
+    //if i do not include in.next(), there will be an endless loop if user inputs 
+    //anything incorrect.
+    // 0 = invalid int
+    // 1 = invalid string
+    // 2 = valid input
+    
     static void defaultConstructor(){
 
     }
@@ -117,20 +126,25 @@ public class Main {
                     System.out.println("Input your car's mileage: ");
                     if(in.hasNextInt()){
                         mileage = in.nextInt();
-                        if (mileage < 0){ 
-                            throw new Exception("Invalid input.");
+                        if (mileage < 0){ //if the next integer is less than 0
+                            errorDetector = 0; //set the errorDetector to 0 for int error
+                            throw new Exception("Invalid amount.");
                         } else {
+                            //no errors detected, break from loop.
+                            errorDetector = 2;
                             break;
                         }
                     } else {
-                        throw new Exception("Invalid input.");
-                        
+                        errorDetector = 1; // 
+                        throw new Exception("Input was not an integer.");
                     }
-                    
                     } catch (Exception excpt){
                         System.out.println(excpt.getMessage());
                         System.out.println("Please try again.");
-                        in.next();
+                        if(errorDetector == 1){
+                            in.next();
+                        }
+                        
     
                 }
             }
@@ -147,10 +161,6 @@ public class Main {
     }
 
     public static int setCapacity(){
-        int errorDetector = 0; //this will be used in the loop to check if the return input is an integer or not
-        //without this, the program will ask for an extra input if i use in.next() 
-        //in the catch when user inputs a capacity <=0, and then it will loop back.
-        //if i do not include in.next(), there will be an endless loop if user inputs anything except an int.
         while(true){
             try{
                 System.out.println("Input the capacity of your inventory: ");
@@ -158,13 +168,13 @@ public class Main {
                     capacity = in.nextInt(); //set capacity to next int
                     if (capacity <= 0){ //if capacity is <= 0, 
                         errorDetector = 0; // set error detector to 0 for int
-                        throw new Exception("Invalid input."); //throw invalid input error
+                        throw new Exception("Invalid amount."); //throw invalid input error
                     } else {
                         break;// otherwise, break out of loop
                     }
                 } else {
                     errorDetector = 1; //otherwise, it is not an integer
-                    throw new Exception("Invalid input.");
+                    throw new Exception("Input was not an integer.");
                     
                 }
                 } catch (Exception excpt){
