@@ -40,19 +40,19 @@ public class Main {
     public static String addVehicle(String autoMake, String autoModel, String autoColor, int autoYear, int autoMileage){
         //loop for make input
             while(true){
-                try{
+                try{//try catch block
                     System.out.println("Input your car's make: ");
                     //make if else block
-                    if(in.hasNext("[A-Za-z]*")){
-                        make = in.next();
-                        break;
+                    if(in.hasNext("[A-Za-z]*")){  // if 'in has alphabetical input
+                        make = in.next(); // set 'make' to the next string input
+                        break; //break loop
                     } else {
-                        throw new Exception("Invalid input.");
+                        throw new Exception("Invalid input."); //otherwise throw error
                     } 
                 }catch (Exception excpt){
-                    System.out.println(excpt.getMessage());
+                    System.out.println(excpt.getMessage()); //get error message
                     System.out.println("Please try again.");
-                    in.next();
+                    in.next(); //get the next line
                 }
             }
             
@@ -101,21 +101,28 @@ public class Main {
                     if(in.hasNextInt()){
                         year = in.nextInt();
                         if (year < 1885){ //1885 was the year cars were first made
-                            throw new Exception("Invalid input.");
+                            errorDetector = 0; // input was invalid int
+                            throw new Exception("Invalid year.");
                         }
-                        else if (year > 2023){
-                            throw new Exception("Invalid input.");
+                        else if (year > 2023){ //no cars are further than '2023' model.
+                            errorDetector = 0; // input was invalid int
+                            throw new Exception("Invalid year.");
                         } else {
+                            errorDetector = 2;
                             break;
                         }
                     }
                     else{
-                        throw new Exception("Invalid input.");
+                        errorDetector = 1;
+                        throw new Exception("Input was not an integer.");
                     }
                 
                 } catch (Exception excpt){
                     System.out.println(excpt.getMessage());
                     System.out.println("Please try again.");
+                    if(errorDetector == 1){
+                        in.next();
+                    }
                 }
                 
             }
@@ -135,7 +142,7 @@ public class Main {
                             break;
                         }
                     } else {
-                        errorDetector = 1; // 
+                        errorDetector = 1; // found that the input was not a string.
                         throw new Exception("Input was not an integer.");
                     }
                     } catch (Exception excpt){
@@ -190,11 +197,83 @@ public class Main {
         return capacity;
     }
 
+    public static void clearScreen(){
+        System.out.print("\033[H\033[2J"); 
+        System.out.flush();
+    }
+
+    public static int menuOptions(int menuChoice){
+        
+
+        do{
+            System.out.println("Main Menu");
+            System.out.println("1.) Add a vehicle ");
+            System.out.println("2.) Remove a vehicle.");
+            System.out.println("3.) List all Vehicles.");
+            System.out.println("4.) Update a Vehicle.");
+            System.out.println("5.) Exit");
+            System.out.println("Please select your Menu Choice: ");
+            
+
+            try{
+
+                if(in.hasNextInt()){
+                    menuChoice = in.nextInt();
+                    switch(menuChoice){
+                
+                        case 1: //case for adding a vehicle
+                            addVehicle(make, model, color, year, mileage); // this will create a new vehicle
+                            clearScreen();
+                            break;
+    
+                        case 2: //case for removing a vehicle
+                            System.out.println("This section has not been added yet!"); //TODO
+                            break;
+    
+                        case 3: //case for Listing all vehicles
+                            listVehicleInfo(); //this will list the vehicle information
+                            break;
+    
+                        case 4: //case for updating a vehicle
+                            System.out.println("This section has not been added yet!"); //TODO
+                            break;
+    
+                        case 5: //case for exiting a program.
+                            System.out.println("Exiting program."); //TODO
+                            System.exit(3);
+                            break;
+    
+                        default: 
+                            throw new Exception("Not a valid Menu Option. Please try again!");
+    
+                    }
+
+                } else {
+                    errorDetector = 1;
+                    throw new Exception("Input was not a number. Please try again!");
+
+                }
+                
+            } catch(Exception excpt) {
+                System.out.println(excpt.getMessage());
+                if (errorDetector ==1){
+                    in.next();
+                }
+                
+            }
+
+
+        }while(menuChoice != 5);
+
+        return menuChoice;
+
+    }
+
     public static void main(String[] args){
         System.out.println("Hi! We are going to store your vehicle information in your inventory.");
-        setCapacity(); //this will set the capacity of the vehicle inventory.
-        addVehicle(make, model, color, year, mileage); // this will create a new vehicle
-        listVehicleInfo(); //this will list the vehicle information
+        System.out.println("First, we will set the capacity of your inventory.");
+        setCapacity(); //this will have the user set the capacity of the vehicle inventory.
+        menuOptions(0);
     }
     
 }
