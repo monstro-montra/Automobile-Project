@@ -19,13 +19,10 @@ public class Main {
     // 1 = invalid string
     // 2 = valid input
     
-    static void defaultConstructor(){
-
-    }
 
     
     static void listAllVehicleInfo(){
-        for (i = 0; i < capacity; i++){
+        for (i = 0; i < capacity; i++){ //loop until i is >= capacity
             int x = i + 1;
             System.out.println("Car number: " + x);
             carArray[i].showData();
@@ -169,12 +166,12 @@ public class Main {
         return carArray[i];
     }
 
-    static String removeVehicle(String autoMake, String autoModel, String autoColor, int autoYear){
-        return "success";
+    static String removeVehicle(String autoMake, String autoModel, String autoColor, int autoYear){ //TODO
+        return "success"; 
 
     }
 
-    static void updateVehicleAttributes(){
+    static void updateVehicleAttributes(){ //TODO
 
     }
 
@@ -210,7 +207,7 @@ public class Main {
     }
 
 
-    public static int menuOptions(int menuChoice){
+    public static int menuOptions(int menuChoice){ 
 
         
         do{
