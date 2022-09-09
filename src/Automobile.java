@@ -61,11 +61,7 @@ public class Automobile {
         return this.mileage;  
     }
 
-    //clone object
-    public Object clone(){
-        Automobile clone = new Automobile(this.make, this.model, this.color, this.year, this.mileage);
-        return clone;
-    }
+
 
 
 
