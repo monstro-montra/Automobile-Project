@@ -11,16 +11,15 @@ public class Main {
     static int capacity;
     public static Scanner in = new Scanner(System.in);
     public static ArrayList<Automobile> carList = new ArrayList<Automobile>(capacity);
-    private static int errorDetector; //this will be used in loop to check if 
+    private static int errorDetector; //for use in int return methods
+    //this will be used in loop to check if 
     //the return input is either an incorrect integer or an incorrect string.
-    //without this, the program will ask     for an extra input if i use in.next() 
+    //without this, the program will ask for an extra input if i use in.next() 
     //if i do not include in.next(), there will be an endless loop if user inputs 
     //anything incorrect.
     // 0 = invalid int
     // 1 = invalid string
     // 2 = valid input
-    
-
     
     static void listAllVehicleInfo(){
         System.out.println("AUTOMOBILE LIST: \n");
@@ -33,7 +32,7 @@ public class Main {
         }
     }
     
-    public static ArrayList<Automobile> addVehicle(Automobile automobile){
+    public static ArrayList<Automobile> addVehicle(Automobile automobile){ //DONE
         int howMany;
         System.out.println("How many vehicles would you like to add?");
         howMany = in.nextInt();
@@ -54,7 +53,7 @@ public class Main {
         return carList;
     }
         
-    public static String makeInput(String autoMake){
+    public static String makeInput(String autoMake){ //DONE
         //loop for make input
         while(true){
             try{//try catch block
@@ -76,7 +75,7 @@ public class Main {
 
     }
         
-    public static String modelInput(String autoModel){
+    public static String modelInput(String autoModel){ //DONE
             //loop for model input
             while(true){
                 try{
@@ -98,7 +97,7 @@ public class Main {
             return model;
     }
 
-    public static String colorInput(String autoColor){
+    public static String colorInput(String autoColor){ //DONE
             //loop for color input
             while(true){
                 try{
@@ -118,7 +117,7 @@ public class Main {
             return color;
         }
     
-    public static int yearInput(int autoYear){
+    public static int yearInput(int autoYear){ //DONE
             //loop for year input
             while(true){
                 try{
@@ -153,7 +152,7 @@ public class Main {
             return year;
     }
 
-    public static int mileageInput(int autoMileage){
+    public static int mileageInput(int autoMileage){ //DONE
             //loop for mileage input
             while(true){
                 try{
@@ -186,7 +185,7 @@ public class Main {
             return mileage; 
         }
     
-    public static int setCapacity(){
+    public static int setCapacity(){ //DONE
         while(true){
             try{
                 System.out.println("Input the initial capacity of your inventory: ");
@@ -196,6 +195,8 @@ public class Main {
                         errorDetector = 0; // set error detector to 0 for int
                         throw new Exception("Invalid amount."); //throw invalid input error
                     } else {
+                        //no errors detected, break from loop.
+                        errorDetector = 2;
                         break;// otherwise, break out of loop
                     }
                 } else {
@@ -218,16 +219,19 @@ public class Main {
     }
 
 
-    static String removeVehicle(String autoMake, String autoModel, String autoColor, int autoYear){ //TODO
-        return "success"; 
+    static void removeVehicle(){ //TODO
+        System.out.println("Which car would you like to remove?");
+        for (int i = 0; i < carList.size(); i++){
+            carList.remove(in.nextInt() - 1);
+            }
+        }
 
-    }
 
     static void updateVehicleAttributes(){ //TODO
 
     }
 
-    public static void showMenu(){
+    public static void showMenu(){ //DONE
         System.out.println("Main Menu");
         System.out.println("1.) Add a vehicle ");
         System.out.println("2.) Remove a vehicle.");
@@ -238,13 +242,10 @@ public class Main {
 
     }
     
-    public static int menuOptions(int menuChoice){ 
-
-    
-        do{
+    public static int menuOptions(int menuChoice){  //DONE/TODO
+        do{ // menu will run at least once. program will keep going back to menu as long as program not exited
             showMenu();
             try{
-
                 if(in.hasNextInt()){
                     menuChoice = in.nextInt();
                     switch(menuChoice){
@@ -254,7 +255,7 @@ public class Main {
                             break;
     
                         case 2: //case for removing a vehicle
-                            System.out.println("This section has not been added yet!"); //TODO
+                            removeVehicle(); //this will remove a vehicle
                             break;
     
                         case 3: //case for Listing all vehicles
@@ -291,7 +292,6 @@ public class Main {
 
 
         }while(menuChoice != 5);
-
         return menuChoice;
 
     }
