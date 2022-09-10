@@ -6,6 +6,7 @@ public class Automobile {
     private String color;
     private int year;
     private int mileage;
+    int addressNo;
     Scanner in = new Scanner(System.in);
 
 
@@ -17,6 +18,14 @@ public class Automobile {
         year = autoYear;
         mileage = autoMileage;
 
+    }
+
+    public Automobile(){
+        this.make = "Toyota";
+        this.model = "Camry";
+        this.color = "Gray";
+        this.year = 2016;
+        this.mileage = 76000;
     }
 
     //setters
@@ -61,7 +70,16 @@ public class Automobile {
         return this.mileage;  
     }
 
-
+    @Override
+    public String toString(){
+        return 
+        "Make: " + this.getMake(make) + "\n" +
+        "Model: " + this.getModel(make) + "\n" +
+        "Color: " + this.getColor(color) + "\n" +
+        "Year: " + this.getYear(year) + "\n" +
+        "Mileage: " + this.getMileage(mileage);
+            
+    }
 
 
 
