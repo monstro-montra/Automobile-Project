@@ -5,7 +5,7 @@ public class Automobile {
     private String model;
     private String color;
     private int year;
-    private int mileage;
+    int mileage;
     int addressNo;
     Scanner in = new Scanner(System.in);
 

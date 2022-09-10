@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
@@ -11,15 +12,7 @@ public class Main {
     static int capacity;
     public static Scanner in = new Scanner(System.in);
     public static ArrayList<Automobile> carList = new ArrayList<Automobile>(capacity);
-    private static int errorDetector; //for use in int return methods
-    //this will be used in loop to check if 
-    //the return input is either an incorrect integer or an incorrect string.
-    //without this, the program will ask for an extra input if i use in.next() 
-    //if i do not include in.next(), there will be an endless loop if user inputs 
-    //anything incorrect.
-    // 0 = invalid int
-    // 1 = invalid string
-    // 2 = valid input
+
     
     static void listAllVehicleInfo(){
         System.out.println("AUTOMOBILE LIST: \n");
@@ -35,20 +28,44 @@ public class Main {
     public static ArrayList<Automobile> addVehicle(Automobile automobile){ //DONE
         int howMany;
         System.out.println("How many vehicles would you like to add?");
-        howMany = in.nextInt();
-        for(int i = 0; i < howMany; i ++){
-            System.out.println("Input car " + (i+1) +" make: ");
-            make = makeInput(make);
-            System.out.println("Input car " + (i+1) + " model: ");
-            model = modelInput(model);
-            System.out.println("Input car " + (i+1) + " color: ");
-            color = colorInput(color);
-            System.out.println("Input car " + (i+1) +" year: ");
-            year = yearInput(year);
-            System.out.println("Input car " + (i+1) + " mileage: ");
-            mileage = mileageInput(mileage);
-            carList.add(new Automobile(make, model, color, year, mileage));
+        while(true){
+            try{
+                if(in.hasNextInt()){
+                    howMany = in.nextInt();
+                    if(howMany < 0){
+                        throw new IntException("Input is less than 0!"); //throw integer exception 
+                    }
+                    else{
+                        for(int i = 0; i < howMany; i ++){
+                            System.out.println("Input car " + (i+1) +" make: ");
+                            make = makeInput(make);
+                            System.out.println("Input car " + (i+1) + " model: ");
+                            model = modelInput(model);
+                            System.out.println("Input car " + (i+1) + " color: ");
+                            color = colorInput(color);
+                            System.out.println("Input car " + (i+1) +" year: ");
+                            year = yearInput(year);
+                            System.out.println("Input car " + (i+1) + " mileage: ");
+                            mileage = mileageInput(mileage);
+                            carList.add(new Automobile(make, model, color, year, mileage));    
+                        }
+                        break;
+                    }
+                }
+                else{
+                    throw new InputMismatchException("Input is not an integer!");
+                }
+                
+            } catch (IntException excpt){
+                System.out.println(excpt.getException());
+                System.out.println("Please try again.");
+            } catch (InputMismatchException er){
+                System.out.println(er.getMessage());
+                System.out.println("Please try again.");
+                in.next();
+            }
         }
+        
         
         return carList;
     }
@@ -124,28 +141,27 @@ public class Main {
                     if(in.hasNextInt()){
                         year = in.nextInt();
                         if (year < 1885){ //1885 was the year cars were first made
-                            errorDetector = 0; // input was invalid int
-                            throw new Exception("Invalid year.");
+                             // input was invalid int
+                            throw new IntException("Invalid year."); //out of bounds int
                         }
                         else if (year > 2023){ //no cars are further than '2023' model.
-                            errorDetector = 0; // input was invalid int
-                            throw new Exception("Invalid year.");
+                            // invalid int
+                            throw new IntException("Invalid year."); //out of bounds int
                         } else {
-                            errorDetector = 2;
                             break;
                         }
                     }
                     else{
-                        errorDetector = 1;
-                        throw new Exception("Input was not an integer.");
+                        throw new InputMismatchException("Input was not an integer.");
                     }
                 
-                } catch (Exception excpt){
-                    System.out.println(excpt.getMessage());
+                } catch (IntException er){
+                    System.out.println(er.getException());
                     System.out.println("Please try again.");
-                    if(errorDetector == 1){
-                        in.next();
-                    }
+                } catch (InputMismatchException excpt){
+                    System.out.println(excpt.getMessage());
+                    System.out.println("Input is not an integer!");
+                    in.next();
                 }
                 
             }
@@ -160,25 +176,21 @@ public class Main {
                     if(in.hasNextInt()){
                         mileage = in.nextInt();
                         if (mileage < 0){ //if the next integer is less than 0
-                            errorDetector = 0; //set the errorDetector to 0 for int error
-                            throw new Exception("Invalid amount.");
+                            throw new IntException("Invalid amount."); //out of bounds
                         } else {
                             //no errors detected, break from loop.
-                            errorDetector = 2;
                             break;
                         }
                     } else {
-                        errorDetector = 1; // found that the input was not a string.
-                        throw new Exception("Input was not an integer.");
+                        throw new InputMismatchException("Input was not an integer.");
                     }
-                    } catch (Exception excpt){
-                        System.out.println(excpt.getMessage());
-                        System.out.println("Please try again.");
-                        if(errorDetector == 1){
-                            in.next();
-                        }
-                        
-    
+                } catch (IntException er){
+                    System.out.println(er.getException());
+                    System.out.println("Please try again.");
+                } catch (InputMismatchException excpt){
+                    System.out.println(excpt.getMessage());
+                    System.out.println("Input is not an integer!");
+                    in.next();
                 }
                 
             }
@@ -192,40 +204,33 @@ public class Main {
                 if(in.hasNextInt()){ // if the next input is an int
                     capacity = in.nextInt(); //set capacity to next int
                     if (capacity <= 0){ //if capacity is <= 0, 
-                        errorDetector = 0; // set error detector to 0 for int
-                        throw new Exception("Invalid amount."); //throw invalid input error
+                        throw new IntException("Invalid amount."); //throw invalid input error
                     } else {
                         //no errors detected, break from loop.
-                        errorDetector = 2;
                         break;// otherwise, break out of loop
                     }
                 } else {
-                    errorDetector = 1; //otherwise, it is not an integer
-                    throw new Exception("Input was not an integer.");
-                    
+                    throw new InputMismatchException("Input was not an integer.");
                 }
-                } catch (Exception excpt){
-                    System.out.println(excpt.getMessage()); //get error message
-                    System.out.println("Please try again.");
-                    if(errorDetector == 1){ //if errorDetector is 1, it is not an integer, therefore get next line
-                        in.next();
-                    }
-                    
-
-            }
+            } catch (IntException er){
+                System.out.println(er.getException());
+                System.out.println("Please try again.");
             
+            } catch (InputMismatchException excpt){ // non integer mismatch
+                System.out.println(excpt.getMessage()); //get error message
+                System.out.println("Please try again.");
+                in.next();
+            }
         }
         return capacity;
     }
-
-
-    static void removeVehicle(){ //TODO
+        
+    static void removeVehicle(){ //DONE
         System.out.println("Which car would you like to remove?");
         for (int i = 0; i < carList.size(); i++){
             carList.remove(in.nextInt() - 1);
             }
         }
-
 
     static void updateVehicleAttributes(){ //TODO
 
@@ -272,22 +277,24 @@ public class Main {
                             break;
     
                         default: 
-                            throw new Exception("Not a valid Menu Option. Please try again!");
+                            throw new IntException("Not a valid Menu Option. ");
     
                     }
 
                 } else {
-                    errorDetector = 1;
-                    throw new Exception("Input was not a number. Please try again!");
+                    throw new InputMismatchException("Input was not a number. ");
 
                 }
                 
-            } catch(Exception excpt) {
-                System.out.println(excpt.getMessage());
-                if (errorDetector ==1){
-                    in.next();
-                }
                 
+            } catch(InputMismatchException er) {
+                System.out.println(er.getMessage());
+                System.out.println("Please try again!");
+                in.next();
+                
+            } catch(IntException excpt){
+                System.out.println(excpt.getMessage());
+
             }
 
 
