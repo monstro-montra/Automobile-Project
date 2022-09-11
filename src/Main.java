@@ -14,7 +14,7 @@ public class Main {
     public static ArrayList<Automobile> carList = new ArrayList<Automobile>(capacity);
 
     
-    static void listAllVehicleInfo(){
+    static void listAllVehicleInfo(){ //DONE
         System.out.println("AUTOMOBILE LIST: \n");
         for(int i = 0; i < carList.size(); i++){
             System.out.println("Automobile: " + (i+1));
@@ -224,16 +224,96 @@ public class Main {
         }
         return capacity;
     }
-        
-    static void removeVehicle(){ //DONE
-        System.out.println("Which car would you like to remove?");
-        for (int i = 0; i < carList.size(); i++){
-            carList.remove(in.nextInt() - 1);
-            }
+    
+
+    public static void removeOptions(){ //DONE
+        int removeChoice;
+
+        if(carList.size() <= 0){
+            System.out.println("There aren't any vehicles to remove at the moment!");
+            return;
         }
 
-    static void updateVehicleAttributes(){ //TODO
+        System.out.println("Would you like to (1) remove one, (2) all vehicles?, or (3) Cancel?");
+        System.out.println("Input the word 'cancel' else to cancel");
+        while(true){
+            try {
+                if (in.hasNextInt()){ // if next user input  is an integer
+                   removeChoice = in.nextInt();
+                   if (removeChoice == 1 ){
+                       removeOneVehicle(); //call remove one vehicle method
+                       break; 
+                   }
+                   else if (removeChoice == 2) {
+                       removeAllVehicles(); //call remove all method
+                       break;
+                   }
+                   else if (removeChoice == 3){
+                        System.out.println("Cancelling...");
+                        return; //cancel out and return from this method
+                   }
+                   else if (removeChoice < 0 || removeChoice > 3){
+                       throw new IntException("Not a valid Menu option.");
+                   }
+                   else {
+                       throw new IntException("Not a valid Menu option.");
+                   }
 
+               } else {
+                   throw new InputMismatchException("Input was not a number. ");
+               }
+          
+           } catch (IntException excpt){ //error handling for wrong integer
+               System.out.println(excpt.getException());
+               System.out.println("Please try again!");
+           } catch (InputMismatchException er){ //error handling for non-integer
+               System.out.println((er.getMessage()));
+               System.out.println("Please try again!");
+               in.next();
+           }
+           
+
+        }
+        
+
+
+    }
+
+
+    static void removeOneVehicle(){ //DONE
+        System.out.println("Which car would you like to remove?");
+        carList.remove(in.nextInt() - 1);
+        System.out.println("Vehicle removed.");
+    }
+    
+    static void removeAllVehicles(){ //DONE
+        System.out.println("Removing all vehicles.");
+        carList.removeAll(carList);
+
+    }
+
+    static void updateVehicleAttributes(){ //DONE
+
+        if (carList.size() < 1){
+            System.out.println("No vehicles to edit!");
+            return;
+        }
+        
+        System.out.println("Which car would you like to change?");
+        System.out.println("Once you select, use the format: Make, Model, Color, Year, and Mileage");
+        while(true){
+            try{
+                carList.set(in.nextInt() -1, new Automobile(makeInput(make), modelInput(model), colorInput(color), yearInput(year), mileageInput(mileage)));
+                System.out.println("Vehicle updated. \n");
+                break;
+            } catch (IndexOutOfBoundsException oBo){
+                System.out.println("Did not select a car. Please try again.");
+            } catch (InputMismatchException er){
+                System.out.println("Did not select car using integer! Please try again.");
+                in.next();
+            } 
+        }
+        return;
     }
 
     public static void showMenu(){ //DONE
@@ -245,6 +325,7 @@ public class Main {
         System.out.println("5.) Exit");
         System.out.println("Please select your Menu Choice: ");
 
+        return;
     }
     
     public static int menuOptions(int menuChoice){  //DONE/TODO
@@ -260,15 +341,16 @@ public class Main {
                             break;
     
                         case 2: //case for removing a vehicle
-                            removeVehicle(); //this will remove a vehicle
+                            removeOptions();
                             break;
-    
+                            
+
                         case 3: //case for Listing all vehicles
                             listAllVehicleInfo(); //this will list the vehicle information
                             break;
     
                         case 4: //case for updating a vehicle
-                            System.out.println("This section has not been added yet!"); //TODO
+                            updateVehicleAttributes();
                             break;
     
                         case 5: //case for exiting a program.
@@ -277,24 +359,26 @@ public class Main {
                             break;
     
                         default: 
-                            throw new IntException("Not a valid Menu Option. ");
-    
+                            if (menuChoice > 5 || menuChoice < 1){
+                                throw new IntException("Not a valid Menu Option. ");
+                            }
+                           
+
                     }
-
                 } else {
-                    throw new InputMismatchException("Input was not a number. ");
-
+                    throw new InputMismatchException("Not an integer!");
                 }
-                
                 
             } catch(InputMismatchException er) {
                 System.out.println(er.getMessage());
-                System.out.println("Please try again!");
+                System.out.println("Please try again.");
                 in.next();
-                
-            } catch(IntException excpt){
-                System.out.println(excpt.getMessage());
+               
 
+            } catch(IntException excpt){
+                System.out.println(excpt.getException());
+                System.out.println("Please try again.");
+                
             }
 
 
