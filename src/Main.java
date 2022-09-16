@@ -1,6 +1,11 @@
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
 
 public class Main {
 
@@ -225,7 +230,6 @@ public class Main {
         return capacity;
     }
     
-
     public static void removeOptions(){ //DONE
         int removeChoice;
 
@@ -279,7 +283,6 @@ public class Main {
 
     }
 
-
     static void removeOneVehicle(){ //DONE
         System.out.println("Which car would you like to remove?");
         carList.remove(in.nextInt() - 1);
@@ -316,6 +319,44 @@ public class Main {
         return;
     }
 
+    public static void printToFile() throws IOException{
+
+        if(carList.size() <= 0){
+            System.out.println("There aren't any vehicles to print to file at the moment!");
+            return;
+        }
+        System.out.println("Would you like to print the car inventory to a file? Y/N");
+        
+        FileOutputStream fos = new FileOutputStream("output");
+        ObjectOutputStream oos = new ObjectOutputStream(fos);
+        while(true){
+            
+            try{
+                if (in.hasNext("Y")){
+                    oos.writeObject(carList);
+                    oos.close();
+                } else if (in.hasNext("y")){
+                    oos.writeObject(carList);
+                } else {
+                    throw new IntException("Wrong input.");
+                }
+            } catch (IntException error){
+                System.out.println(error.getException());
+                System.out.println("Please try again.");
+            } catch (InputMismatchException er){
+                System.out.println("Did not input Y/y.");
+                System.out.println("Please try again.");
+                in.next();
+            }
+
+        }
+        
+    }
+        
+        
+    
+    
+
     public static void showMenu(){ //DONE
         System.out.println("Main Menu");
         System.out.println("1.) Add a vehicle ");
@@ -323,6 +364,7 @@ public class Main {
         System.out.println("3.) List all Vehicles.");
         System.out.println("4.) Update a Vehicle.");
         System.out.println("5.) Exit");
+        System.out.println("6.) Print to file");
         System.out.println("Please select your Menu Choice: ");
 
         return;
@@ -357,9 +399,11 @@ public class Main {
                             System.out.println("Exiting program."); //TODO
                             System.exit(3);
                             break;
+                        
+                        case 6: printToFile();
     
                         default: 
-                            if (menuChoice > 5 || menuChoice < 1){
+                            if (menuChoice > 6 || menuChoice < 1){
                                 throw new IntException("Not a valid Menu Option. ");
                             }
                            
@@ -378,7 +422,8 @@ public class Main {
             } catch(IntException excpt){
                 System.out.println(excpt.getException());
                 System.out.println("Please try again.");
-                
+            } catch(IOException ioE){
+                System.out.println("Error. Please try again.");
             }
 
 
@@ -391,7 +436,7 @@ public class Main {
     public static void main(String[] args){
         System.out.println("Hi! We are going to store your vehicle information in your inventory.");
         setCapacity();
-        
+
         menuOptions(0);
     }
     

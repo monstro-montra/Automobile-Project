@@ -1,4 +1,4 @@
-import java.util.Scanner;
+
 
 public class Automobile {
     private String make;
@@ -7,7 +7,7 @@ public class Automobile {
     private int year;
     int mileage;
     int addressNo;
-    Scanner in = new Scanner(System.in);
+
 
 
     //parameterized constructor for automobile object
@@ -20,13 +20,6 @@ public class Automobile {
 
     }
 
-    public Automobile(){
-        this.make = "Toyota";
-        this.model = "Camry";
-        this.color = "Gray";
-        this.year = 2016;
-        this.mileage = 76000;
-    }
 
     //setters
     public void setMake(String make){
